@@ -6,7 +6,6 @@ using System.Linq;
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
-using Assert = NUnit.Framework.Legacy.ClassicAssert;
 
 namespace Telesign.Test
 {
@@ -115,21 +114,21 @@ namespace Telesign.Test
 
             client.Status(externalId);
 
-            Assert.AreEqual("GET", this.requests.Last().HttpMethod, "method is not as expected");
-            Assert.AreEqual($"/v1/mobile/verification/status/{externalId}", this.requests.Last().RawUrl, "path is not as expected");
-            Assert.IsNull(this.requestHeaders.Last()["Content-Type"]);
-            Assert.AreEqual("HMAC-SHA256", this.requestHeaders.Last()["x-ts-auth-method"],
+            Assert.That(this.requests.Last().HttpMethod, Is.EqualTo("GET"), "method is not as expected");
+            Assert.That(this.requests.Last().RawUrl, Is.EqualTo($"/v1/mobile/verification/status/{externalId}"), "path is not as expected");
+            Assert.That(this.requestHeaders.Last()["Content-Type"], Is.Null);
+            Assert.That(this.requestHeaders.Last()["x-ts-auth-method"], Is.EqualTo("HMAC-SHA256"),
                 "x-ts-auth-method header is not as expected");
 
             Guid dummyGuid;
-            Assert.IsTrue(Guid.TryParse(this.requestHeaders.Last()["x-ts-nonce"], out dummyGuid),
+            Assert.That(Guid.TryParse(this.requestHeaders.Last()["x-ts-nonce"], out dummyGuid), Is.True,
                 "x-ts-nonce header is not a valid UUID");
 
             DateTime dummyDateTime;
-            Assert.IsTrue(DateTime.TryParse(this.requestHeaders.Last()["Date"], out dummyDateTime),
+            Assert.That(DateTime.TryParse(this.requestHeaders.Last()["Date"], out dummyDateTime), Is.True,
                 "Date header is not valid rfc2616 format");
 
-            Assert.IsNotNull(this.requestHeaders.Last()["Authorization"]);
+            Assert.That(this.requestHeaders.Last()["Authorization"], Is.Not.Null);
         }
         
         [Test]
@@ -146,21 +145,21 @@ namespace Telesign.Test
 
             await client.StatusAsync(externalId);
 
-            Assert.AreEqual("GET", this.requests.Last().HttpMethod, "method is not as expected");
-            Assert.AreEqual($"/v1/mobile/verification/status/{externalId}", this.requests.Last().RawUrl, "path is not as expected");
-            Assert.IsNull(this.requestHeaders.Last()["Content-Type"]);
-            Assert.AreEqual("HMAC-SHA256", this.requestHeaders.Last()["x-ts-auth-method"],
+            Assert.That(this.requests.Last().HttpMethod, Is.EqualTo("GET"), "method is not as expected");
+            Assert.That(this.requests.Last().RawUrl, Is.EqualTo($"/v1/mobile/verification/status/{externalId}"), "path is not as expected");
+            Assert.That(this.requestHeaders.Last()["Content-Type"], Is.Null);
+            Assert.That(this.requestHeaders.Last()["x-ts-auth-method"], Is.EqualTo("HMAC-SHA256"),
                 "x-ts-auth-method header is not as expected");
 
             Guid dummyGuid;
-            Assert.IsTrue(Guid.TryParse(this.requestHeaders.Last()["x-ts-nonce"], out dummyGuid),
+            Assert.That(Guid.TryParse(this.requestHeaders.Last()["x-ts-nonce"], out dummyGuid), Is.True,
                 "x-ts-nonce header is not a valid UUID");
 
             DateTime dummyDateTime;
-            Assert.IsTrue(DateTime.TryParse(this.requestHeaders.Last()["Date"], out dummyDateTime),
+            Assert.That(DateTime.TryParse(this.requestHeaders.Last()["Date"], out dummyDateTime), Is.True,
                 "Date header is not valid rfc2616 format");
 
-            Assert.IsNotNull(this.requestHeaders.Last()["Authorization"]);
+            Assert.That(this.requestHeaders.Last()["Authorization"], Is.Not.Null);
         }
     }
 }

@@ -6,7 +6,6 @@ using System.Linq;
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
-using Assert = NUnit.Framework.Legacy.ClassicAssert;
 
 namespace Telesign.Test
 {
@@ -92,22 +91,22 @@ namespace Telesign.Test
 
             await client.PhoneIdAsync("15555555555");
 
-            Assert.AreEqual("POST", this.requests.Last().HttpMethod, "method is not as expected");
-            Assert.AreEqual("/v1/phoneid/15555555555", this.requests.Last().RawUrl, "path is not as expected");
-            Assert.AreEqual("application/json", this.requestHeaders.Last()["Content-Type"],
+            Assert.That(this.requests.Last().HttpMethod, Is.EqualTo("POST"), "method is not as expected");
+            Assert.That(this.requests.Last().RawUrl, Is.EqualTo("/v1/phoneid/15555555555"), "path is not as expected");
+            Assert.That(this.requestHeaders.Last()["Content-Type"], Is.EqualTo("application/json"),
                 "Content-Type header is not as expected");
-            Assert.AreEqual("HMAC-SHA256", this.requestHeaders.Last()["x-ts-auth-method"],
+            Assert.That(this.requestHeaders.Last()["x-ts-auth-method"], Is.EqualTo("HMAC-SHA256"),
                 "x-ts-auth-method header is not as expected");
 
             Guid dummyGuid;
-            Assert.IsTrue(Guid.TryParse(this.requestHeaders.Last()["x-ts-nonce"], out dummyGuid),
+            Assert.That(Guid.TryParse(this.requestHeaders.Last()["x-ts-nonce"], out dummyGuid), Is.True,
                 "x-ts-nonce header is not a valid UUID");
 
             DateTime dummyDateTime;
-            Assert.IsTrue(DateTime.TryParse(this.requestHeaders.Last()["Date"], out dummyDateTime),
+            Assert.That(DateTime.TryParse(this.requestHeaders.Last()["Date"], out dummyDateTime), Is.True,
                 "Date header is not valid rfc2616 format");
 
-            Assert.IsNotNull(this.requestHeaders.Last()["Authorization"]);
+            Assert.That(this.requestHeaders.Last()["Authorization"], Is.Not.Null); 
         }
     }
 }
