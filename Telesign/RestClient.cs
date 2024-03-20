@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using Newtonsoft.Json.Linq;
 using System.Security.Cryptography;
 using System.Net;
-using Newtonsoft.Json;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Text.Json;
+using System.Text.Json.Nodes;
 using System.Threading.Tasks;
 
 namespace Telesign
@@ -110,11 +110,12 @@ namespace Telesign
 
                     try
                     {
-                        this.Json = JObject.Parse(this.Body);
+                        var jsonNode = JsonNode.Parse(this.Body);
+                        this.Json = jsonNode == null ? [] : jsonNode.AsObject();
                     }
-                    catch (JsonReaderException)
+                    catch (JsonException)
                     {
-                        this.Json = new JObject();
+                        this.Json = [];
                     }    
                 }
                 
@@ -125,19 +126,20 @@ namespace Telesign
                 this.Body = await BodyTask.ConfigureAwait(false) ;
                 try
                 {
-                    this.Json = JObject.Parse(this.Body);
+                    var jsonNode = JsonNode.Parse(this.Body);
+                    this.Json = jsonNode == null ? [] : jsonNode.AsObject();
                 }
-                catch (JsonReaderException)
+                catch (JsonException)
                 {
-                    this.Json = new JObject();
+                    this.Json = [];
                 }
-                
+
             }
 
             public int StatusCode { get; set; }
             public HttpResponseHeaders Headers { get; set; }
             public string Body { get; set; }
-            public JObject Json { get; set; }
+            public JsonObject Json { get; set; }
             public bool OK { get; set; }
         }
 

@@ -1,8 +1,8 @@
-﻿using Newtonsoft.Json;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace Telesign
@@ -67,7 +67,7 @@ namespace Telesign
 
             string resourceUri = string.Format("{0}{1}", this.restEndpoint, resource);
 
-            fieldsToSign = JsonConvert.SerializeObject(parameters);
+            fieldsToSign = JsonSerializer.Serialize(parameters);
             request = new HttpRequestMessage(method, resourceUri);
             request.Content = new StringContent(fieldsToSign);
             request.Content.Headers.ContentType = new MediaTypeHeaderValue(contentType);
